@@ -97,8 +97,20 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-	  HAL_GPIO_TogglePin(GPIOA, LED1_Pin);
-	  HAL_Delay(500);
+
+	  HAL_GPIO_WritePin(GPIOA, LED3_Pin,1);
+//	  HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
+//	  HAL_Delay(500);
+//	  HAL_GPIO_TogglePin(LED2_GPIO_Port, LED2_Pin);
+//	  HAL_Delay(500);
+//	  HAL_GPIO_TogglePin(LED3_GPIO_Port, LED3_Pin);
+//	  HAL_Delay(500);
+//	  HAL_GPIO_TogglePin(LED4_GPIO_Port, LED4_Pin);
+//	  HAL_Delay(500);
+//	  HAL_GPIO_TogglePin(LED5_GPIO_Port, LED5_Pin);
+//	  HAL_Delay(500);
+//	  HAL_GPIO_TogglePin(LED6_GPIO_Port, LED6_Pin);
+//	  HAL_Delay(500);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
