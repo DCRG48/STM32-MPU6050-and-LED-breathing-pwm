@@ -96,21 +96,21 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  for(uint16_t duty_cycle = 0; duty_cycle<180; duty_cycle ++)
+	  {
+    /* USER CODE END WHILE */
+		  __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_4, duty_cycle);
+		  HAL_Delay(10);
+	  }
+
+	  for(uint16_t duty_cycle = 180; duty_cycle>0; duty_cycle --)
+	  {
+    /* USER CODE END WHILE */
+		  __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_4, duty_cycle);
+		  HAL_Delay(10);
+	  }
     /* USER CODE END WHILE */
 
-	  HAL_GPIO_WritePin(GPIOA, LED3_Pin,1);
-//	  HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
-//	  HAL_Delay(500);
-//	  HAL_GPIO_TogglePin(LED2_GPIO_Port, LED2_Pin);
-//	  HAL_Delay(500);
-//	  HAL_GPIO_TogglePin(LED3_GPIO_Port, LED3_Pin);
-//	  HAL_Delay(500);
-//	  HAL_GPIO_TogglePin(LED4_GPIO_Port, LED4_Pin);
-//	  HAL_Delay(500);
-//	  HAL_GPIO_TogglePin(LED5_GPIO_Port, LED5_Pin);
-//	  HAL_Delay(500);
-//	  HAL_GPIO_TogglePin(LED6_GPIO_Port, LED6_Pin);
-//	  HAL_Delay(500);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -184,7 +184,7 @@ static void MX_TIM1_Init(void)
   htim1.Instance = TIM1;
   htim1.Init.Prescaler = 0;
   htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim1.Init.Period = 65535;
+  htim1.Init.Period = 255;
   htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim1.Init.RepetitionCounter = 0;
   htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
@@ -200,7 +200,7 @@ static void MX_TIM1_Init(void)
     Error_Handler();
   }
   sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 0;
+  sConfigOC.Pulse = 25;
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
   sConfigOC.OCIdleState = TIM_OCIDLESTATE_RESET;
@@ -228,7 +228,11 @@ static void MX_TIM1_Init(void)
   }
   /* USER CODE BEGIN TIM1_Init 2 */
 
+  HAL_TIM_Base_Start(&htim1);
+  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_4);
+
   /* USER CODE END TIM1_Init 2 */
+  HAL_TIM_MspPostInit(&htim1);
 
 }
 
@@ -287,8 +291,8 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LED6_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PA11 PA12 */
-  GPIO_InitStruct.Pin = GPIO_PIN_11|GPIO_PIN_12;
+  /*Configure GPIO pin : PA12 */
+  GPIO_InitStruct.Pin = GPIO_PIN_12;
   GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
