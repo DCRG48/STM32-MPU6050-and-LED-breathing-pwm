@@ -18,10 +18,10 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "STM32_IMU.h"
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "STM32_IMU.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -92,9 +92,8 @@ int main(void)
   MX_GPIO_Init();
   MX_TIM2_Init();
   MX_I2C2_Init();
-  init_IMU_MPU6050();
   /* USER CODE BEGIN 2 */
-
+  init_IMU_MPU6050();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -115,6 +114,7 @@ int main(void)
 	  }
 
 	  read_IMU_temp();
+	  Read_IMU_Gyro();
 
   }
     /* USER CODE END WHILE */
@@ -190,7 +190,7 @@ static void MX_I2C2_Init(void)
 
   /* USER CODE END I2C2_Init 1 */
   hi2c2.Instance = I2C2;
-  hi2c2.Init.Timing = 0x10707DBC;
+  hi2c2.Init.Timing = 0x3040F0FF;
   hi2c2.Init.OwnAddress1 = 0;
   hi2c2.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
   hi2c2.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
