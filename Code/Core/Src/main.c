@@ -112,15 +112,15 @@ int main(void)
 		  __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_3, duty_cycle);
 		  HAL_Delay(10);
 	  }
-
-	  read_IMU_temp();
 	  Read_IMU_Gyro();
+	  HAL_Delay(10);
 
+	  }
   }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-  }
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -187,10 +187,10 @@ static void MX_I2C2_Init(void)
   /* USER CODE END I2C2_Init 0 */
 
   /* USER CODE BEGIN I2C2_Init 1 */
-
+//	RCC->APBENR1 |= (1<<22);  // enable I2C CLOCK
   /* USER CODE END I2C2_Init 1 */
   hi2c2.Instance = I2C2;
-  hi2c2.Init.Timing = 0x3040F0FF;
+  hi2c2.Init.Timing = 0x10807DBB;
   hi2c2.Init.OwnAddress1 = 0;
   hi2c2.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
   hi2c2.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;

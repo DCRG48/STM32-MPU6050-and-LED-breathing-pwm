@@ -29,7 +29,7 @@
 
 
 extern I2C_HandleTypeDef hi2c2;
-uint8_t tx_buffer,rx_buffer,temp_H,temp_L;
+uint8_t tx_buffer,rx_buffer,temp_H,temp_L,check_val;
 int16_t temperature;
 uint16_t temp_degree;
 uint8_t Rx_gyro_values[6];
@@ -39,12 +39,15 @@ int16_t Gyro_X_data = 0;
 int16_t Gyro_Y_data = 0;
 int16_t Gyro_Z_data = 0;
 
+uint8_t Gx = 0;
+uint8_t Gy = 0;
+uint8_t Gz = 0;
 
 void read_IMU_temp()
 {
-	HAL_I2C_Mem_Read(&hi2c2, IMU_addr_R, IMU_TEMP_H, 1, temp_H, 1, 1000);
+	HAL_I2C_Mem_Read(&hi2c2, IMU_addr_R, IMU_TEMP_H, 1, &temp_H, 1, 1000);
 
-	HAL_I2C_Mem_Read(&hi2c2, IMU_addr_R, IMU_TEMP_H, 1, temp_L, 1, 1000);
+	HAL_I2C_Mem_Read(&hi2c2, IMU_addr_R, IMU_TEMP_H, 1, &temp_L, 1, 1000);
 
 	temperature = ((temp_H << 8) + temp_L);
 	temp_degree = ((temperature/340) + 36.53);
@@ -57,23 +60,37 @@ void Read_IMU_Gyro()
     Gyro_X_data = (int16_t)(Rx_gyro_values[0] << 8 | Rx_gyro_values [1]);
     Gyro_Y_data = (int16_t)(Rx_gyro_values[2] << 8 | Rx_gyro_values [3]);
     Gyro_Z_data = (int16_t)(Rx_gyro_values[4] << 8 | Rx_gyro_values [5]);
+
+    Gx = Gyro_X_data / 131.0;
+    Gy = Gyro_Y_data / 131.0;
+    Gy = Gyro_X_data / 131.0;
+
+    if (Gx >= 5)
+    {
+    	HAL_GPIO_TogglePin(GPIOA, LED1_Pin);
+	}
 }
 
 
 void init_IMU_MPU6050()
 {
+uint8_t check;
 
-	if	(HAL_I2C_IsDeviceReady(&hi2c2, IMU_addr_R, 1, 1000))
+	HAL_I2C_Mem_Read(&hi2c2, IMU_addr_R, 0x75, 1, &check, 1, 1000);
+
+	if	(check == 0x68)
 
 		{
+//			HAL_I2C_Mem_Read(&hi2c2, IMU_addr_R, 0x75, 1, &rx_buffer, 1, 1000);
 			tx_buffer = 0x07;
-			HAL_I2C_Mem_Write(&hi2c2, IMU_addr_W, IMU_REG_SMPLRT_DIV, 1, tx_buffer, 1, 1000);
-			tx_buffer = 0xE0;
-			HAL_I2C_Mem_Write(&hi2c2, IMU_addr_W, IMU_REG_GYRO_CONFIG, 1, tx_buffer, 1, 1000);
+			HAL_I2C_Mem_Write(&hi2c2, IMU_addr_W, IMU_REG_SMPLRT_DIV, 1, &tx_buffer, 1, 1000);
 			tx_buffer = 0x00;
-			HAL_I2C_Mem_Write(&hi2c2, IMU_addr_W, IMU_REG_PWR_MNGMT, 1, tx_buffer, 1, 1000);
+			HAL_I2C_Mem_Write(&hi2c2, IMU_addr_W, IMU_REG_GYRO_CONFIG, 1, &tx_buffer, 1, 1000);
 			tx_buffer = 0x00;
-			HAL_I2C_Mem_Write(&hi2c2, IMU_addr_W, IMU_REG_ACCEL_CONFIG, 1, tx_buffer, 1, 1000);
+			HAL_I2C_Mem_Write(&hi2c2, IMU_addr_W, IMU_REG_PWR_MNGMT, 1, &tx_buffer, 1, 1000);
+			tx_buffer = 0x00;
+			HAL_I2C_Mem_Write(&hi2c2, IMU_addr_W, IMU_REG_ACCEL_CONFIG, 1, &tx_buffer, 1, 1000);
 		}
+
 
 }
