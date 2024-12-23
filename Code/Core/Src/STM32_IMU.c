@@ -39,9 +39,9 @@ int16_t Gyro_X_data = 0;
 int16_t Gyro_Y_data = 0;
 int16_t Gyro_Z_data = 0;
 
-uint8_t Gx = 0;
-uint8_t Gy = 0;
-uint8_t Gz = 0;
+int8_t Gx = 0;
+int8_t Gy = 0;
+int8_t Gz = 0;
 
 void read_IMU_temp()
 {
@@ -63,7 +63,7 @@ void Read_IMU_Gyro()
 
     Gx = Gyro_X_data / 131.0;
     Gy = Gyro_Y_data / 131.0;
-    Gy = Gyro_X_data / 131.0;
+    Gz = Gyro_Z_data / 131.0;
 
     if (Gx >= 5)
     {
